@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+    text-align: right;
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #e6e6e7;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+.titleBar {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+}
+
+#operations{
+    -webkit-app-region: no-drag;
+}

@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  engineType    = "library"
+  binaryTargets = ["native", "windows"]
+  output        = "../release/app/node_modules/@prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Testings {
+  id        String   @id @default(uuid())
+  up        Json
+  down      Json
+  createdAt DateTime
+  updatedAt DateTime
+  Gov       Govs?    @relation(fields: [govId], references: [id])
+  govId     String?
+}
+
+model Govs {
+  id                String     @id @default(uuid())
+  gov_name          String
+  gov_place         String
+  place_description String
+  location          Json
+  fiber_type        String
+  fiber_len_UP      Int
+  fiber_len_DOWN    Int
+  end_line_UP       Int
+  end_line_DOWN     Int
+  testing           Testings[]
+}
