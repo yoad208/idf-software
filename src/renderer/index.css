@@ -20,3 +20,37 @@ body {
 #operations{
     -webkit-app-region: no-drag;
 }
+
+.leaflet-geosearch-bar form .glass {
+  padding: 0 1.2rem;
+}
+
+.leaflet-geosearch-bar form .reset {
+  background-color: #1564bf;
+  color: #f3f3f4;
+  transition: .5s;
+}
+.leaflet-geosearch-bar form .reset:hover {
+  background-color: #2274d3;
+  color: #f3f3f4;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in {
+  background-color: #1564bf;
+  color: #f3f3f4;
+  transition: .5s;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in:hover {
+  background-color: #2274d3;
+  color: #f3f3f4;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-out {
+  background-color: #f1f1f2;
+  transition: .5s;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-out:hover {
+  background-color: #dedee1;
+}
