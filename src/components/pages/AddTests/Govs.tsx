@@ -16,7 +16,7 @@ export const Govs = () => {
       p={1}
       bgcolor="whitesmoke"
       sx={{
-        maxHeight: '97%',
+        maxHeight: '95%',
         overflow: 'auto',
         overflowY: '-moz-hidden-unscrollable',
         '&::-webkit-scrollbar': { display: 'none' },
