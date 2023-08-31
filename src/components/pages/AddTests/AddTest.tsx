@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useContext, useState } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import { Box, Button, FormControl, Stack } from '@mui/material';
-import { ITest } from '../../../interfaces/ITestings.interface';
+import { IFiberColors, ITest } from '../../../interfaces/ITestings.interface';
 import { IAddTestInterface } from '../../../interfaces/IAddTest.interface';
 import { DynamicInput } from '../../utils/dynamicInput/DynamicInput';
 import { DynamicInputField } from '../../utils/dynamicInput/DynamicInputField';
@@ -22,33 +22,66 @@ export const AddTest: FC<IAddTestInterface> = ({
     createdAt: new Date(Date.now()),
     updatedAt: new Date(Date.now()),
   };
-  const [upTestsArray, setUpTestsArray] = useState<ITest[]>([
-    { ...test, id: uuidV4() },
-  ]);
-  const [downTestsArray, setDownTestsArray] = useState<ITest[]>([
-    { ...test, id: uuidV4() },
-  ]);
+  const [upTestsArray, setUpTestsArray] = useState<IFiberColors>({
+    blue: [{ ...test, id: uuidV4() }],
+    orange: [{ ...test, id: uuidV4() }],
+    green: [{ ...test, id: uuidV4() }],
+    brown: [{ ...test, id: uuidV4() }],
+    grey: [{ ...test, id: uuidV4() }],
+    white: [{ ...test, id: uuidV4() }],
+  });
+  const [downTestsArray, setDownTestsArray] = useState<IFiberColors>({
+    blue: [{ ...test, id: uuidV4() }],
+    orange: [{ ...test, id: uuidV4() }],
+    green: [{ ...test, id: uuidV4() }],
+    brown: [{ ...test, id: uuidV4() }],
+    grey: [{ ...test, id: uuidV4() }],
+    white: [{ ...test, id: uuidV4() }],
+  });
   const { tests, setTests } = useContext(testsProvider);
-  const arr = testDirection === 'down' ? downTestsArray : upTestsArray;
+  const arr =
+    testDirection === 'down'
+      ? downTestsArray[fiberColors[activeStep || 0].label]
+      : upTestsArray[fiberColors[activeStep || 0].label];
   const lastTestIsNotEmpty = () => {
     if (testDirection === 'up') {
       return !(
-        upTestsArray[upTestsArray.length - 1].distance === 0 ||
-        upTestsArray[upTestsArray.length - 1].landing === 0
+        upTestsArray[fiberColors[activeStep || 0].label][
+          upTestsArray[fiberColors[activeStep || 0].label].length - 1
+        ].distance === 0 ||
+        upTestsArray[fiberColors[activeStep || 0].label][
+          upTestsArray[fiberColors[activeStep || 0].label].length - 1
+        ].landing === 0
       );
     }
     return !(
-      downTestsArray[downTestsArray.length - 1].distance === 0 ||
-      downTestsArray[downTestsArray.length - 1].landing === 0
+      downTestsArray[fiberColors[activeStep || 0].label][
+        downTestsArray[fiberColors[activeStep || 0].label].length - 1
+      ].distance === 0 ||
+      downTestsArray[fiberColors[activeStep || 0].label][
+        downTestsArray[fiberColors[activeStep || 0].label].length - 1
+      ].landing === 0
     );
   };
 
   const addMoreTests = () => {
     if (!lastTestIsNotEmpty()) return;
     if (testDirection === 'up') {
-      setUpTestsArray((prev) => [...prev, { ...test, id: uuidV4() }]);
+      setUpTestsArray((prev) => ({
+        ...prev,
+        [fiberColors[activeStep || 0].label]: [
+          ...prev[fiberColors[activeStep || 0].label],
+          { ...test, id: uuidV4() },
+        ],
+      }));
     } else {
-      setDownTestsArray((prev) => [...prev, { ...test, id: uuidV4() }]);
+      setDownTestsArray((prev) => ({
+        ...prev,
+        [fiberColors[activeStep || 0].label]: [
+          ...prev[fiberColors[activeStep || 0].label],
+          { ...test, id: uuidV4() },
+        ],
+      }));
     }
   };
 
@@ -56,35 +89,39 @@ export const AddTest: FC<IAddTestInterface> = ({
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
     index: number
   ) => {
-    let newTestsArray: any[];
+    let newTestsArray: ITest[];
     if (testDirection === 'up') {
-      newTestsArray = [...upTestsArray];
+      newTestsArray = [...upTestsArray[fiberColors[activeStep || 0].label]];
       newTestsArray[index][e.target.name] = Number(e.target.value);
-      setUpTestsArray(newTestsArray);
+      newTestsArray[index].id = uuidV4();
+      setUpTestsArray((prev) => ({
+        ...prev,
+        [fiberColors[activeStep || 0].label]: newTestsArray,
+      }));
     } else {
-      newTestsArray = [...downTestsArray];
+      newTestsArray = [...downTestsArray[fiberColors[activeStep || 0].label]];
       newTestsArray[index][e.target.name] = Number(e.target.value);
-      setDownTestsArray(newTestsArray);
+      newTestsArray[index].id = uuidV4();
+      setDownTestsArray((prev) => ({
+        ...prev,
+        [fiberColors[activeStep || 0].label]: newTestsArray,
+      }));
     }
   };
 
   const handleSubmit = () => {
     if (!lastTestIsNotEmpty()) return;
-    const tubeColor: string = fiberColors[activeStep || 0].label;
     if (testDirection === 'down') {
       setTests({
         ...tests,
-        down: { ...tests.down, [tubeColor]: downTestsArray },
+        down: downTestsArray,
       });
     } else {
       setTests({
         ...tests,
-        up: { ...tests.up, [tubeColor]: upTestsArray },
+        up: upTestsArray,
       });
     }
-
-    setUpTestsArray([{ ...test, id: uuidV4() }]);
-    setDownTestsArray([{ ...test, id: uuidV4() }]);
   };
 
   return (

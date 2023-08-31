@@ -99,7 +99,11 @@ export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
             />
             <Typography textAlign="center">({open}) הוסף בדיקה </Typography>
           </Stack>
-          <StepperComponent testsDirection={open} steps={fiberColors}>
+          <StepperComponent
+            setOpen={setOpen}
+            testsDirection={open}
+            steps={fiberColors}
+          >
             <AddTest testDirection={open} />
           </StepperComponent>
         </Box>

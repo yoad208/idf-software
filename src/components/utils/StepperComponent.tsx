@@ -1,4 +1,13 @@
-import { Children, cloneElement, FC, isValidElement, ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  Dispatch,
+  FC,
+  isValidElement,
+  ReactNode,
+  SetStateAction,
+  useMemo,
+} from 'react';
 import { Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { StepperButtons } from './StepperButtons';
 import { useStepper } from '../../hooks/useStepper';
@@ -7,6 +16,7 @@ type TStepperComponent = {
   children: ReactNode;
   steps: any[];
   testsDirection: string;
+  setOpen: Dispatch<SetStateAction<string>>;
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -14,6 +24,7 @@ export const StepperComponent: FC<TStepperComponent> = ({
   children,
   steps,
   testsDirection,
+  setOpen,
 }) => {
   const {
     handleNext,
@@ -25,6 +36,12 @@ export const StepperComponent: FC<TStepperComponent> = ({
     completed,
     activeStep,
   } = useStepper(steps);
+
+  useMemo(() => {
+    if (allStepsCompleted()) {
+      setOpen('');
+    }
+  }, [allStepsCompleted, setOpen]);
   return (
     <>
       <Stepper activeStep={activeStep} alternativeLabel>
