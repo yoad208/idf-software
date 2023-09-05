@@ -5,8 +5,17 @@ import {
   Modal,
   Stack,
   Typography,
+  Tab,
 } from '@mui/material';
-import { FC, useContext, useState } from 'react';
+import { TabList, TabContext, TabPanel } from '@mui/lab';
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  SyntheticEvent,
+  useContext,
+  useState,
+} from 'react';
 import { FaXmark } from 'react-icons/fa6';
 import { StepperComponent } from '../../utils/StepperComponent';
 import { AddTest } from './AddTest';
@@ -49,37 +58,84 @@ export const fiberColors = [
   },
 ];
 
+type TestDirectionProps = {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+};
+export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
+  const { tests } = useContext(testsProvider);
+  const [value, setValue] = useState('1');
+
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  const handleSubmit = () => {
+    console.log(tests);
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="לכיוון ראש חוקר" value="1" />
+            <Tab label="לכיוון סוף קו" value="2" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
+          <StepperComponent testDirection="down" steps={fiberColors}>
+            <AddTest testDirection="down" />
+          </StepperComponent>
+        </TabPanel>
+        <TabPanel value="2">
+          <StepperComponent testDirection="up" steps={fiberColors}>
+            <AddTest testDirection="up" />
+          </StepperComponent>
+        </TabPanel>
+      </TabContext>
+
+      <Button
+        variant="contained"
+        sx={{ position: 'absolute', bottom: 40, right: 40 }}
+        onClick={handleSubmit}
+      >
+        סיום
+      </Button>
+    </>
+  );
+};
+
 export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
-  const [open, setOpen] = useState('');
+  const [open, setOpen] = useState(false);
   const { tests, setTests } = useContext(testsProvider);
-  const handelClick = (testDirection: string) => {
+  const handelClick = () => {
     setTests({ ...tests, govId });
-    setOpen(testDirection);
+    setOpen(true);
   };
   return (
     <>
-      <Stack direction="row" justifyContent="space-evenly">
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Button {...rest} onClick={() => handelClick('up')}>
-          הוסף בדיקה (UP)
-        </Button>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Button {...rest} onClick={() => handelClick('down')}>
-          הוסף בדיקה (DOWN)
-        </Button>
-      </Stack>
+      <Button {...rest} onClick={handelClick}>
+        הוסף בדיקה
+      </Button>
       <Modal
-        open={open !== ''}
+        open={open}
         sx={{
           minHeight: '50px',
           maxWidth: '800px',
           width: '100%',
           color: 'black',
           border: 'none',
-          m: '125px auto',
+          m: '80px auto',
+          position: 'relative',
         }}
       >
-        <Box bgcolor="white" height="100%" borderRadius="10px">
+        <Box
+          bgcolor="white"
+          height="100%"
+          minHeight="500px"
+          borderRadius="10px"
+        >
           <Stack
             borderRadius="10px 10px 0 0"
             direction="row-reverse"
@@ -94,18 +150,12 @@ export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
             <FaXmark
               style={{ float: 'right', cursor: 'pointer' }}
               onClick={() => {
-                setOpen('');
+                setOpen(false);
               }}
             />
-            <Typography textAlign="center">({open}) הוסף בדיקה </Typography>
+            <Typography textAlign="center"> הוסף בדיקה </Typography>
           </Stack>
-          <StepperComponent
-            setOpen={setOpen}
-            testsDirection={open}
-            steps={fiberColors}
-          >
-            <AddTest testDirection={open} />
-          </StepperComponent>
+          <TestsDirections setOpen={setOpen} />
         </Box>
       </Modal>
     </>

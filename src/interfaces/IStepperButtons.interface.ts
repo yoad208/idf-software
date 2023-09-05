@@ -3,9 +3,10 @@ export interface IStepperButtons {
   handleBack: () => void;
   handleNext: () => void;
   completed: { [p: number]: boolean };
+  allStepsCompleted: () => boolean;
   handleComplete: () => void;
   number: number;
   totalSteps: number;
   steps: any[];
-  testsDirection: string;
+  testDirection: string;
 }

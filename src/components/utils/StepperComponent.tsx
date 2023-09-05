@@ -1,30 +1,26 @@
+import { Children, cloneElement, FC, isValidElement, ReactNode } from 'react';
 import {
-  Children,
-  cloneElement,
-  Dispatch,
-  FC,
-  isValidElement,
-  ReactNode,
-  SetStateAction,
-  useMemo,
-} from 'react';
-import { Step, StepLabel, Stepper, Typography } from '@mui/material';
+  Box,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from '@mui/material';
+import { BsPatchCheckFill } from 'react-icons/bs';
 import { StepperButtons } from './StepperButtons';
 import { useStepper } from '../../hooks/useStepper';
 
 type TStepperComponent = {
   children: ReactNode;
   steps: any[];
-  testsDirection: string;
-  setOpen: Dispatch<SetStateAction<string>>;
+  testDirection: string;
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const StepperComponent: FC<TStepperComponent> = ({
   children,
   steps,
-  testsDirection,
-  setOpen,
+  testDirection,
 }) => {
   const {
     handleNext,
@@ -37,11 +33,6 @@ export const StepperComponent: FC<TStepperComponent> = ({
     activeStep,
   } = useStepper(steps);
 
-  useMemo(() => {
-    if (allStepsCompleted()) {
-      setOpen('');
-    }
-  }, [allStepsCompleted, setOpen]);
   return (
     <>
       <Stepper activeStep={activeStep} alternativeLabel>
@@ -59,13 +50,16 @@ export const StepperComponent: FC<TStepperComponent> = ({
           </Step>
         ))}
       </Stepper>
-      <div>
+      <Box>
         {allStepsCompleted() ? (
-          <>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
+          <Stack alignItems="center" direction="column" spacing={2} p={8}>
+            <BsPatchCheckFill fontSize="25px" style={{ color: 'green' }} />
+            <Typography
+              sx={{ width: '100%', textAlign: 'center', color: 'green' }}
+            >
+              כיוון הבדיקה הושלם
             </Typography>
-          </>
+          </Stack>
         ) : (
           <>
             {Children.map(children, (child) => {
@@ -85,12 +79,13 @@ export const StepperComponent: FC<TStepperComponent> = ({
           handleNext={handleNext}
           completed={completed}
           handleComplete={handleComplete}
+          allStepsCompleted={allStepsCompleted}
           number={completedSteps()}
           totalSteps={totalSteps()}
           steps={steps}
-          testsDirection={testsDirection}
+          testDirection={testDirection}
         />
-      </div>
+      </Box>
     </>
   );
 };
