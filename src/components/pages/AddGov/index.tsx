@@ -21,7 +21,6 @@ const TextFieldStyle = {
   },
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const NewGov = () => {
   const { createGov } = useGovs();
   const isLargerThen768 = useMediaQuery('(min-width: 768px)');
@@ -36,8 +35,6 @@ export const NewGov = () => {
     fiber_type: '',
     fiber_len_UP: 0,
     fiber_len_DOWN: 0,
-    end_line_UP: 0,
-    end_line_DOWN: 0,
   });
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -132,7 +129,7 @@ export const NewGov = () => {
                 />
               </FormControl>
               <FormControl>
-                <FormLabel>(DOWN) מטרא'ז הסיב</FormLabel>
+                <FormLabel>(DOWN) מטרא&apos;ז הסיב</FormLabel>
                 <TextField
                   variant="filled"
                   fullWidth
@@ -141,32 +138,6 @@ export const NewGov = () => {
                   label={"מטרא'ז הסיב"}
                   onChange={(e) =>
                     setGov({ ...gov, fiber_len_DOWN: Number(e.target.value) })
-                  }
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>(UP) סןף קו</FormLabel>
-                <TextField
-                  variant="filled"
-                  fullWidth
-                  sx={TextFieldStyle}
-                  size="small"
-                  label="סוף קו (UP)"
-                  onChange={(e) =>
-                    setGov({ ...gov, end_line_UP: Number(e.target.value) })
-                  }
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>(DOWN) סוף קו</FormLabel>
-                <TextField
-                  variant="filled"
-                  fullWidth
-                  sx={TextFieldStyle}
-                  size="small"
-                  label="סוף קו (DOWN)"
-                  onChange={(e) =>
-                    setGov({ ...gov, end_line_DOWN: Number(e.target.value) })
                   }
                 />
               </FormControl>
@@ -183,7 +154,7 @@ export const NewGov = () => {
                       setGov({
                         ...gov,
                         location: {
-                          ...location,
+                          ...gov.location,
                           lat: Number(e.target.value),
                           lang: gov.location.lang,
                         },
@@ -200,7 +171,7 @@ export const NewGov = () => {
                       setGov({
                         ...gov,
                         location: {
-                          ...location,
+                          ...gov.location,
                           lang: Number(e.target.value),
                           lat: gov.location.lat,
                         },

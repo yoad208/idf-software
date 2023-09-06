@@ -32,7 +32,5 @@ model Govs {
   fiber_type        String
   fiber_len_UP      Int
   fiber_len_DOWN    Int
-  end_line_UP       Int
-  end_line_DOWN     Int
   testing           Testings[]
 }

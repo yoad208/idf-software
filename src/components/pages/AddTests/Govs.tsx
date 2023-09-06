@@ -41,7 +41,7 @@ export const Govs = () => {
                   {gov.gov_place}
                 </Typography>
 
-                <Typography textAlign="right" width="90%">
+                <Typography textAlign="right" width="70%">
                   {gov.place_description}
                 </Typography>
                 <Typography textAlign="right" width="50%">
@@ -50,9 +50,6 @@ export const Govs = () => {
 
                 <Typography textAlign="center" fontSize={14} width="60%">
                   {gov.fiber_len_UP} / {gov.fiber_len_DOWN}
-                </Typography>
-                <Typography textAlign="center" fontSize={14} width="60%">
-                  {gov.end_line_UP} / {gov.end_line_DOWN}
                 </Typography>
               </Stack>
               <AddTestButtons

@@ -18,7 +18,7 @@ export const Header = () => {
         מיקום
       </Typography>
 
-      <Typography textAlign="right" fontWeight="bold" width="90%">
+      <Typography textAlign="right" fontWeight="bold" width="70%">
         פירוט מיקום
       </Typography>
       <Typography textAlign="right" fontWeight="bold" width="50%">
@@ -27,15 +27,7 @@ export const Header = () => {
 
       <Stack width="60%">
         <Typography textAlign="center" fontWeight="bold">
-          מטרא'ז
-        </Typography>
-        <Typography textAlign="center" fontWeight="bold" fontSize={10}>
-          (down / up)
-        </Typography>
-      </Stack>
-      <Stack width="60%">
-        <Typography textAlign="center" fontWeight="bold">
-          סוף קו
+          מטרא&apos;ז
         </Typography>
         <Typography textAlign="center" fontWeight="bold" fontSize={10}>
           (down / up)
