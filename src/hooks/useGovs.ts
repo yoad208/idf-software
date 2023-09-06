@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { IGov } from '../interfaces/IGov.interface';
 import OSApi from '../renderer/os-api';
 
-// eslint-disable-next-line import/prefer-default-export
 export const useGovs = () => {
   const [govsLength, setGovsLength] = useState<number>(0);
   const [govs, setGovs] = useState<IGov[]>([]);
@@ -17,9 +16,12 @@ export const useGovs = () => {
   }, [govsLength]);
 
   const createGov = async (gov: IGov) => {
-    await OSApi.prisma().govs.create({
-      data: JSON.parse(JSON.stringify(gov)),
-    });
+    await OSApi.prisma()
+      .govs.create({
+        data: JSON.parse(JSON.stringify(gov)),
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
     setGovsLength((prev) => prev + 1);
   };
 

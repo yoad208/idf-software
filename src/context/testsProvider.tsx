@@ -25,22 +25,10 @@ export const TestProvider = ({ children }: { children: ReactNode }) => {
   const [tests, setTests] = useState<ITestings>({
     id: uuidV4(),
     govId: '',
-    up: {
-      blue: [],
-      orange: [],
-      green: [],
-      brown: [],
-      grey: [],
-      white: [],
-    } as IFiberColors,
-    down: {
-      blue: [],
-      orange: [],
-      green: [],
-      brown: [],
-      grey: [],
-      white: [],
-    } as IFiberColors,
+    up: {} as IFiberColors,
+    down: {} as IFiberColors,
+    createdAt: new Date(Date.now()),
+    updatedAt: new Date(Date.now()),
   });
 
   return (

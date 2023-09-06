@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useContext, useState } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { Box, Button, FormControl, Stack } from '@mui/material';
-import { IFiberColors, ITest } from '../../../interfaces/ITestings.interface';
+import { Box, Button, FormControl, Stack, TextField } from '@mui/material';
+import { IFiberColors, IOtdr } from '../../../interfaces/ITestings.interface';
 import { IAddTestInterface } from '../../../interfaces/IAddTest.interface';
 import { DynamicInput } from '../../utils/dynamicInput/DynamicInput';
 import { DynamicInputField } from '../../utils/dynamicInput/DynamicInputField';
@@ -15,30 +15,58 @@ export const AddTest: FC<IAddTestInterface> = ({
   activeStep,
   testDirection,
 }) => {
-  const test: ITest = {
+  const test: IOtdr = {
     id: '',
     distance: 0,
     landing: 0,
-    createdAt: new Date(Date.now()),
-    updatedAt: new Date(Date.now()),
   };
   const [testsArray, setTestsArray] = useState<IFiberColors>({
-    blue: [{ ...test, id: uuidV4() }],
-    orange: [{ ...test, id: uuidV4() }],
-    green: [{ ...test, id: uuidV4() }],
-    brown: [{ ...test, id: uuidV4() }],
-    grey: [{ ...test, id: uuidV4() }],
-    white: [{ ...test, id: uuidV4() }],
+    blue: {
+      OTDR: [{ ...test, id: uuidV4() }],
+      CumulativeLanding: 0,
+      AverageLanding: 0,
+      end: 0,
+    },
+    orange: {
+      OTDR: [{ ...test, id: uuidV4() }],
+      CumulativeLanding: 0,
+      AverageLanding: 0,
+      end: 0,
+    },
+    green: {
+      OTDR: [{ ...test, id: uuidV4() }],
+      CumulativeLanding: 0,
+      AverageLanding: 0,
+      end: 0,
+    },
+    brown: {
+      OTDR: [{ ...test, id: uuidV4() }],
+      CumulativeLanding: 0,
+      AverageLanding: 0,
+      end: 0,
+    },
+    grey: {
+      OTDR: [{ ...test, id: uuidV4() }],
+      CumulativeLanding: 0,
+      AverageLanding: 0,
+      end: 0,
+    },
+    white: {
+      OTDR: [{ ...test, id: uuidV4() }],
+      CumulativeLanding: 0,
+      AverageLanding: 0,
+      end: 0,
+    },
   });
   const { tests, setTests } = useContext(testsProvider);
-  const arr = testsArray[fiberColors[activeStep || 0].label];
+  const arr = testsArray[fiberColors[activeStep || 0].label].OTDR;
   const lastTestIsNotEmpty = () => {
     return !(
-      testsArray[fiberColors[activeStep || 0].label][
-        testsArray[fiberColors[activeStep || 0].label].length - 1
+      testsArray[fiberColors[activeStep || 0].label].OTDR[
+        testsArray[fiberColors[activeStep || 0].label].OTDR.length - 1
       ].distance === 0 ||
-      testsArray[fiberColors[activeStep || 0].label][
-        testsArray[fiberColors[activeStep || 0].label].length - 1
+      testsArray[fiberColors[activeStep || 0].label].OTDR[
+        testsArray[fiberColors[activeStep || 0].label].OTDR.length - 1
       ].landing === 0
     );
   };
@@ -47,10 +75,13 @@ export const AddTest: FC<IAddTestInterface> = ({
     if (!lastTestIsNotEmpty()) return;
     setTestsArray((prev) => ({
       ...prev,
-      [fiberColors[activeStep || 0].label]: [
+      [fiberColors[activeStep || 0].label]: {
         ...prev[fiberColors[activeStep || 0].label],
-        { ...test, id: uuidV4() },
-      ],
+        OTDR: [
+          ...prev[fiberColors[activeStep || 0].label].OTDR,
+          { ...test, id: uuidV4() },
+        ],
+      },
     }));
   };
 
@@ -58,14 +89,17 @@ export const AddTest: FC<IAddTestInterface> = ({
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
     index: number
   ) => {
-    const newTestsArray: ITest[] = [
-      ...testsArray[fiberColors[activeStep || 0].label],
+    const newTestsArray: IOtdr[] = [
+      ...testsArray[fiberColors[activeStep || 0].label].OTDR,
     ];
     newTestsArray[index][e.target.name] = Number(e.target.value);
     newTestsArray[index].id = uuidV4();
     setTestsArray((prev) => ({
       ...prev,
-      [fiberColors[activeStep || 0].label]: newTestsArray,
+      [fiberColors[activeStep || 0].label]: {
+        ...prev[fiberColors[activeStep || 0].label],
+        OTDR: newTestsArray,
+      },
     }));
   };
 
@@ -81,8 +115,8 @@ export const AddTest: FC<IAddTestInterface> = ({
     <Box
       sx={{
         p: 1.5,
-        height: '220px',
-        maxHeight: '220px',
+        height: '250px',
+        maxHeight: '250px',
         overflow: 'auto',
         overflowY: '-moz-hidden-unscrollable',
         '&::-webkit-scrollbar': { display: 'none' },
@@ -118,7 +152,70 @@ export const AddTest: FC<IAddTestInterface> = ({
           </DynamicInput>
           <DynamicInputButton onClick={addMoreTests} />
         </DynamicInputGroup>
-
+        <Stack
+          direction="row"
+          spacing={2}
+          py={2}
+          pr={3.5}
+          flexWrap="wrap"
+          justifyContent="center"
+        >
+          <TextField
+            sx={{ width: '20%' }}
+            type="number"
+            size="small"
+            variant="filled"
+            label="ניחות מצטבר"
+            value={
+              testsArray[fiberColors[activeStep || 0].label].CumulativeLanding
+            }
+            onChange={(e) =>
+              setTestsArray((prev) => ({
+                ...prev,
+                [fiberColors[activeStep || 0].label]: {
+                  ...prev[fiberColors[activeStep || 0].label],
+                  CumulativeLanding: Number(e.target.value),
+                },
+              }))
+            }
+          />
+          <TextField
+            sx={{ width: '20%' }}
+            type="number"
+            size="small"
+            variant="filled"
+            label="ניחות ממוצע"
+            value={
+              testsArray[fiberColors[activeStep || 0].label].AverageLanding
+            }
+            onChange={(e) =>
+              setTestsArray((prev) => ({
+                ...prev,
+                [fiberColors[activeStep || 0].label]: {
+                  ...prev[fiberColors[activeStep || 0].label],
+                  AverageLanding: Number(e.target.value),
+                },
+              }))
+            }
+          />
+          <TextField
+            sx={{ width: '20%' }}
+            type="number"
+            size="small"
+            variant="filled"
+            label="סוף קו"
+            value={testsArray[fiberColors[activeStep || 0].label].end}
+            onChange={(e) =>
+              setTestsArray((prev) => ({
+                ...prev,
+                [fiberColors[activeStep || 0].label]: {
+                  ...prev[fiberColors[activeStep || 0].label],
+                  end: Number(e.target.value),
+                },
+              }))
+            }
+          />
+        </Stack>
         <FormControl
           fullWidth
           sx={{ cursor: 'pointer', fontSize: 20, mt: 3, maxWidth: '250px' }}

@@ -1,21 +1,27 @@
 import { useEffect, useState } from 'react';
-import { ipcRenderer } from 'electron';
 import { ITestings } from '../interfaces/ITestings.interface';
+import OSApi from '../renderer/os-api';
 
 export const useGovTestings = () => {
   const [govTestingsUpdated, setGovTestingsUpdated] = useState<number>(0);
   const [govTestings, setGovTestings] = useState<ITestings[]>([]);
 
+  const fetch = async () => {
+    const res = await OSApi.prisma().testings.findMany({});
+    setGovTestings(JSON.parse(JSON.stringify(res)));
+  };
+
   useEffect(() => {
-    ipcRenderer.invoke('get-gov-testings').then(() => {
-      ipcRenderer.on('all-gov-testings', (_, testings) => {
-        console.log(testings);
-        setGovTestings(testings);
-      });
-    });
+    fetch();
   }, [govTestingsUpdated]);
 
-  const createTestings = () => {
+  const createTestings = (test: ITestings) => {
+    OSApi.prisma()
+      .testings.create({
+        data: JSON.parse(JSON.stringify(test)),
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
     setGovTestingsUpdated((prev) => prev + 1);
   };
 

@@ -1,4 +1,12 @@
-import { Children, cloneElement, FC, isValidElement, ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  FC,
+  isValidElement,
+  ReactNode,
+  useContext,
+  useEffect,
+} from 'react';
 import {
   Box,
   Stack,
@@ -10,6 +18,7 @@ import {
 import { BsPatchCheckFill } from 'react-icons/bs';
 import { StepperButtons } from './StepperButtons';
 import { useStepper } from '../../hooks/useStepper';
+import { testsProvider } from '../../context/testsProvider';
 
 type TStepperComponent = {
   children: ReactNode;
@@ -32,6 +41,19 @@ export const StepperComponent: FC<TStepperComponent> = ({
     completed,
     activeStep,
   } = useStepper(steps);
+  const { setUpTestComplete, setDownTestComplete } = useContext(testsProvider);
+
+  useEffect(() => {
+    if (allStepsCompleted()) {
+      if (testDirection === 'up') setUpTestComplete(true);
+      else setDownTestComplete(true);
+    }
+  }, [
+    setDownTestComplete,
+    setUpTestComplete,
+    testDirection,
+    allStepsCompleted,
+  ]);
 
   return (
     <>

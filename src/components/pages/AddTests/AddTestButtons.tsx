@@ -20,6 +20,9 @@ import { FaXmark } from 'react-icons/fa6';
 import { StepperComponent } from '../../utils/StepperComponent';
 import { AddTest } from './AddTest';
 import { testsProvider } from '../../../context/testsProvider';
+import { IGov } from '../../../interfaces/IGov.interface';
+import { useGovs } from '../../../hooks/useGovs';
+import { useGovTestings } from '../../../hooks/useGovTestings';
 
 interface AddTestButtonProps extends ButtonProps {
   govId: string;
@@ -61,17 +64,38 @@ export const fiberColors = [
 type TestDirectionProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
+
+/* TODO :
+ * extract this components to other file
+ */
 export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
-  const { tests } = useContext(testsProvider);
+  const { tests, upTestComplete, downTestComplete } = useContext(testsProvider);
   const [value, setValue] = useState('1');
+  const { createTestings } = useGovTestings();
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  const handleSubmit = () => {
-    console.log(tests);
-    setOpen(false);
+  const handleSubmit = async () => {
+    if (!upTestComplete && !downTestComplete) {
+      window.alert('לא ביצעת בדיקה לכיוון ראש חוקר ולא לכיוון סוף קו');
+      return;
+    }
+    if (upTestComplete && !downTestComplete) {
+      if (window.confirm('להמשיך בלי לבדוק לכיוון הראש חוקר?')) {
+        createTestings(tests);
+        setOpen(false);
+      }
+    } else if (!upTestComplete && downTestComplete) {
+      if (window.confirm('להמשיך בלי לבדוק לכיוון סוף הקו?')) {
+        createTestings(tests);
+        setOpen(false);
+      }
+    } else {
+      createTestings(tests);
+      setOpen(false);
+    }
   };
 
   return (
@@ -107,12 +131,18 @@ export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
 };
 
 export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
-  const [open, setOpen] = useState(false);
+  const { govs } = useGovs();
   const { tests, setTests } = useContext(testsProvider);
+  const [open, setOpen] = useState(false);
+  const [currGov, setCurrGov] = useState<IGov | null>(null);
   const handelClick = () => {
+    const gov: IGov | undefined = govs.find((g) => g.id === govId);
+    if (!gov) return;
+    setCurrGov(gov);
     setTests({ ...tests, govId });
     setOpen(true);
   };
+
   return (
     <>
       <Button {...rest} onClick={handelClick}>
@@ -140,7 +170,7 @@ export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
             borderRadius="10px 10px 0 0"
             direction="row-reverse"
             px={1}
-            spacing="40%"
+            spacing="35%"
             bgcolor="whitesmoke"
             alignItems="center"
             sx={{
@@ -153,7 +183,10 @@ export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
                 setOpen(false);
               }}
             />
-            <Typography textAlign="center"> הוסף בדיקה </Typography>
+            <Typography textAlign="center" px={1}>
+              ({currGov?.gov_name}) הוסף בדיקה לגוב
+            </Typography>
+            {currGov?.place_description}
           </Stack>
           <TestsDirections setOpen={setOpen} />
         </Box>

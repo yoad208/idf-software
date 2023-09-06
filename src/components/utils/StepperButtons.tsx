@@ -17,14 +17,14 @@ export const StepperButtons: FC<IStepperButtons> = ({
 }) => {
   const { tests } = useContext(testsProvider);
   const currentFiberColor =
-    tests[testDirection][fiberColors[activeStep]?.label];
+    tests[testDirection][fiberColors[activeStep]?.label]?.OTDR;
   const completedSteps = () => {
     if (
       currentFiberColor.length === 0 ||
       currentFiberColor[0].distance === 0 ||
       currentFiberColor[0].landing === 0
     ) {
-      console.error('You need to add at least one test for this tube color');
+      window.alert('You need to add at least one test for this tube color');
     } else {
       handleComplete();
     }

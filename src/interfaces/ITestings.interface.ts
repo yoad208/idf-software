@@ -1,18 +1,23 @@
-export interface ITest {
+export interface IOtdr {
   id: string;
   distance: number;
   landing: number;
-  createdAt: Date;
-  updatedAt: Date;
+}
+
+export interface ITest {
+  OTDR: IOtdr[];
+  CumulativeLanding: number;
+  AverageLanding: number;
+  end: number;
 }
 
 export interface IFiberColors {
-  blue: ITest[];
-  orange: ITest[];
-  green: ITest[];
-  brown: ITest[];
-  grey: ITest[];
-  white: ITest[];
+  blue: ITest;
+  orange: ITest;
+  green: ITest;
+  brown: ITest;
+  grey: ITest;
+  white: ITest;
 }
 
 export interface ITestings {
@@ -20,4 +25,6 @@ export interface ITestings {
   govId: string;
   up: IFiberColors;
   down: IFiberColors;
+  createdAt: Date;
+  updatedAt: Date;
 }
