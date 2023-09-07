@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/prefer-default-export
 import { GoPlusCircle } from 'react-icons/go';
 
-// eslint-disable-next-line import/prefer-default-export
 export const DynamicInputButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <GoPlusCircle

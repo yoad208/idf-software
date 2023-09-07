@@ -13,6 +13,8 @@ import { useGovTestings } from '../../../hooks/useGovTestings';
 import { StepperComponent } from '../../utils/StepperComponent';
 import { AddTest } from './AddTest';
 import { fiberColors } from './AddTestButtons';
+import { Toast } from '../../utils/Toast';
+import { IToast } from '../../../interfaces/IToast.interface';
 
 type TestDirectionProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -21,6 +23,8 @@ type TestDirectionProps = {
 export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
   const { tests, upTestComplete, downTestComplete } = useContext(testsProvider);
   const [value, setValue] = useState('1');
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState<IToast>({} as IToast);
   const { createTestings } = useGovTestings();
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
@@ -29,20 +33,25 @@ export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
 
   const handleSubmit = async () => {
     if (!upTestComplete && !downTestComplete) {
-      window.alert('לא ביצעת בדיקה לכיוון ראש חוקר ולא לכיוון סוף קו');
+      setToastMessage({
+        message: 'לא ניתן לסיים את הפעולה בלי לבדוק שום כיוון',
+        severity: 'error',
+      });
+      setOpenToast(true);
       return;
     }
     if (upTestComplete && !downTestComplete) {
-      if (window.confirm('להמשיך בלי לבדוק לכיוון הראש חוקר?')) {
+      if (window.confirm('להמשיך בלי לבדוק לכיוון ראש חוקר?')) {
         createTestings(tests);
         setOpen(false);
       }
     } else if (!upTestComplete && downTestComplete) {
-      if (window.confirm('להמשיך בלי לבדוק לכיוון סוף הקו?')) {
+      if (window.confirm('להמשיך בלי לבדוק לכיוון סוף קו?')) {
         createTestings(tests);
         setOpen(false);
       }
     } else {
+      createTestings(tests);
       createTestings(tests);
       setOpen(false);
     }
@@ -53,8 +62,12 @@ export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="לכיוון ראש חוקר" value="1" />
-            <Tab label="לכיוון סוף קו" value="2" />
+            <Tab
+              label="לכיוון ראש חוקר"
+              value="1"
+              disabled={downTestComplete}
+            />
+            <Tab label="לכיוון סוף קו" value="2" disabled={upTestComplete} />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -76,6 +89,12 @@ export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
       >
         סיום
       </Button>
+      <Toast
+        open={openToast}
+        setOpen={setOpenToast}
+        message={toastMessage.message}
+        severity={toastMessage.severity}
+      />
     </>
   );
 };

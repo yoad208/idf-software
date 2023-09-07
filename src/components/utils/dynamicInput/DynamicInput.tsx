@@ -7,7 +7,6 @@ export interface DynamicInputProps extends StackProps {
   children: ReactNode;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const DynamicInput: FC<DynamicInputProps> = ({
   arr,
   children,
@@ -15,7 +14,7 @@ export const DynamicInput: FC<DynamicInputProps> = ({
 }) => {
   return (
     <>
-      {arr.map((_, i) => {
+      {arr?.map((_, i) => {
         return (
           <Stack {...rest} key={i}>
             <Typography>{i + 1}</Typography>

@@ -11,6 +11,8 @@ import {
 import { FormEvent, useState } from 'react';
 import { IGov } from '../../../interfaces/IGov.interface';
 import { useGovs } from '../../../hooks/useGovs';
+import { IToast } from '../../../interfaces/IToast.interface';
+import { Toast } from '../../utils/Toast';
 
 const TextFieldStyle = {
   TextField: {
@@ -24,6 +26,8 @@ const TextFieldStyle = {
 export const NewGov = () => {
   const { createGov } = useGovs();
   const isLargerThen768 = useMediaQuery('(min-width: 768px)');
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState<IToast>({} as IToast);
   const [gov, setGov] = useState<IGov>({
     gov_name: '',
     gov_place: '',
@@ -39,6 +43,11 @@ export const NewGov = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await createGov(gov);
+    setToastMessage({
+      message: 'הגוב נוסף בהצלחה',
+      severity: 'success',
+    });
+    setOpenToast(true);
   };
 
   return (
@@ -197,73 +206,12 @@ export const NewGov = () => {
           </Button>
         </FormControl>
       </form>
+      <Toast
+        open={openToast}
+        setOpen={setOpenToast}
+        message={toastMessage.message}
+        severity={toastMessage.severity}
+      />
     </Paper>
   );
 };
-
-//     <Stack spacing={1}>
-//                         <Typography fontSize={"1.2rem"} fontWeight={"bolder"}>
-//                             תוצאות הבדיקות
-//                         </Typography>
-//                         <FormControl>
-//                             <FormLabel>
-//                                 כחול
-//                             </FormLabel>
-//                             <Stack direction={"row"} spacing={1}>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"מרחק"}/>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"ניחות"}/>
-//                             </Stack>
-//                         </FormControl>
-//                         <FormControl>
-//                             <FormLabel>
-//                                 כתום
-//                             </FormLabel>
-//                             <Stack direction={"row"} spacing={1}>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"מרחק"}/>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"ניחות"}/>
-//                             </Stack>
-//                         </FormControl>
-//                         <FormControl>
-//                             <FormLabel>
-//                                 ירוק
-//                             </FormLabel>
-//                             <Stack direction={"row"} spacing={1}>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"מרחק"}/>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"ניחות"}/>
-//                             </Stack>
-//                         </FormControl>
-//                         <FormControl>
-//                             <FormLabel>
-//                                 חום
-//                             </FormLabel>
-//                             <Stack direction={"row"} spacing={1}>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"מרחק"}/>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"ניחות"}/>
-//                             </Stack>
-//                         </FormControl>
-//                         <FormControl>
-//                             <FormLabel>
-//                                 אפור
-//                             </FormLabel>
-//                             <Stack direction={"row"} spacing={1}>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"מרחק"}/>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"ניחות"}/>
-//                             </Stack>
-//                         </FormControl>
-//                         <FormControl>
-//                             <FormLabel>
-//                                 לבן
-//                             </FormLabel>
-//                             <Stack direction={"row"} spacing={1}>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"מרחק"}/>
-//                                 <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"ניחות"}/>
-//                             </Stack>
-//                         </FormControl>
-//
-//                         <FormControl>
-//                             <FormLabel>
-//                                 סוף הקטע
-//                             </FormLabel>
-//                             <TextField variant={"filled"} sx={TextFieldStyle} size={"small"} label={"סוף הקטע"}/>
-//                         </FormControl>
-//                     </Stack>

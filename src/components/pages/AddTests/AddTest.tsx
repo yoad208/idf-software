@@ -10,6 +10,8 @@ import { DynamicInputGroup } from '../../utils/dynamicInput/DynamicInputGroup';
 import { TestInput } from './TestInput';
 import { fiberColors } from './AddTestButtons';
 import { testsProvider } from '../../../context/testsProvider';
+import { Toast } from '../../utils/Toast';
+import { IToast } from '../../../interfaces/IToast.interface';
 
 export const AddTest: FC<IAddTestInterface> = ({
   activeStep,
@@ -20,69 +22,48 @@ export const AddTest: FC<IAddTestInterface> = ({
     distance: 0,
     landing: 0,
   };
-  const [testsArray, setTestsArray] = useState<IFiberColors>({
-    blue: {
-      OTDR: [{ ...test, id: uuidV4() }],
-      CumulativeLanding: 0,
-      AverageLanding: 0,
-      end: 0,
-    },
-    orange: {
-      OTDR: [{ ...test, id: uuidV4() }],
-      CumulativeLanding: 0,
-      AverageLanding: 0,
-      end: 0,
-    },
-    green: {
-      OTDR: [{ ...test, id: uuidV4() }],
-      CumulativeLanding: 0,
-      AverageLanding: 0,
-      end: 0,
-    },
-    brown: {
-      OTDR: [{ ...test, id: uuidV4() }],
-      CumulativeLanding: 0,
-      AverageLanding: 0,
-      end: 0,
-    },
-    grey: {
-      OTDR: [{ ...test, id: uuidV4() }],
-      CumulativeLanding: 0,
-      AverageLanding: 0,
-      end: 0,
-    },
-    white: {
-      OTDR: [{ ...test, id: uuidV4() }],
-      CumulativeLanding: 0,
-      AverageLanding: 0,
-      end: 0,
-    },
-  });
+  const [testsArray, setTestsArray] = useState<IFiberColors>(
+    {} as IFiberColors
+  );
+  const [openToast, setOpenToast] = useState(false);
   const { tests, setTests } = useContext(testsProvider);
-  const arr = testsArray[fiberColors[activeStep || 0].label].OTDR;
+  const arr = testsArray[fiberColors[activeStep || 0].label]?.OTDR;
+  const [toastMessage, setToastMessage] = useState<IToast>({} as IToast);
   const lastTestIsNotEmpty = () => {
     return !(
-      testsArray[fiberColors[activeStep || 0].label].OTDR[
-        testsArray[fiberColors[activeStep || 0].label].OTDR.length - 1
-      ].distance === 0 ||
-      testsArray[fiberColors[activeStep || 0].label].OTDR[
-        testsArray[fiberColors[activeStep || 0].label].OTDR.length - 1
-      ].landing === 0
+      (!testsArray[fiberColors[activeStep || 0].label] &&
+        testsArray[fiberColors[activeStep || 0].label]?.OTDR[
+          testsArray[fiberColors[activeStep || 0].label]?.OTDR.length - 1
+        ].distance === 0) ||
+      (!testsArray[fiberColors[activeStep || 0].label] &&
+        testsArray[fiberColors[activeStep || 0].label]?.OTDR[
+          testsArray[fiberColors[activeStep || 0].label]?.OTDR.length - 1
+        ].landing === 0)
     );
   };
 
   const addMoreTests = () => {
     if (!lastTestIsNotEmpty()) return;
-    setTestsArray((prev) => ({
-      ...prev,
-      [fiberColors[activeStep || 0].label]: {
-        ...prev[fiberColors[activeStep || 0].label],
-        OTDR: [
-          ...prev[fiberColors[activeStep || 0].label].OTDR,
-          { ...test, id: uuidV4() },
-        ],
-      },
-    }));
+    setTestsArray((prev) => {
+      if (!prev[fiberColors[activeStep || 0].label]) {
+        return {
+          ...prev,
+          [fiberColors[activeStep || 0].label]: {
+            OTDR: [{ ...test, id: uuidV4() }],
+          },
+        };
+      }
+      return {
+        ...prev,
+        [fiberColors[activeStep || 0].label]: {
+          ...prev[fiberColors[activeStep || 0].label],
+          OTDR: [
+            ...prev[fiberColors[activeStep || 0].label]?.OTDR,
+            { ...test, id: uuidV4() },
+          ],
+        },
+      };
+    });
   };
 
   const updateTest = (
@@ -90,7 +71,7 @@ export const AddTest: FC<IAddTestInterface> = ({
     index: number
   ) => {
     const newTestsArray: IOtdr[] = [
-      ...testsArray[fiberColors[activeStep || 0].label].OTDR,
+      ...testsArray[fiberColors[activeStep || 0].label]?.OTDR,
     ];
     newTestsArray[index][e.target.name] = Number(e.target.value);
     newTestsArray[index].id = uuidV4();
@@ -104,11 +85,23 @@ export const AddTest: FC<IAddTestInterface> = ({
   };
 
   const handleSubmit = () => {
-    if (!lastTestIsNotEmpty()) return;
+    if (!lastTestIsNotEmpty()) {
+      setToastMessage({
+        message: 'לא נבחרו בדיקות',
+        severity: 'error',
+      });
+      setOpenToast(true);
+      return;
+    }
     setTests({
       ...tests,
       [`${testDirection}`]: testsArray,
     });
+    setToastMessage({
+      message: 'הבדיקה הוספה בהצלחה',
+      severity: 'success',
+    });
+    setOpenToast(true);
   };
 
   return (
@@ -150,7 +143,13 @@ export const AddTest: FC<IAddTestInterface> = ({
               />
             </DynamicInputField>
           </DynamicInput>
-          <DynamicInputButton onClick={addMoreTests} />
+          {arr?.length > 0 ? (
+            <DynamicInputButton onClick={addMoreTests} />
+          ) : (
+            <Button variant="outlined" onClick={addMoreTests}>
+              OTDR הוסף
+            </Button>
+          )}
         </DynamicInputGroup>
         <Stack
           direction="row"
@@ -167,7 +166,7 @@ export const AddTest: FC<IAddTestInterface> = ({
             variant="filled"
             label="ניחות מצטבר"
             value={
-              testsArray[fiberColors[activeStep || 0].label].CumulativeLanding
+              testsArray[fiberColors[activeStep || 0].label]?.CumulativeLanding
             }
             onChange={(e) =>
               setTestsArray((prev) => ({
@@ -186,7 +185,7 @@ export const AddTest: FC<IAddTestInterface> = ({
             variant="filled"
             label="ניחות ממוצע"
             value={
-              testsArray[fiberColors[activeStep || 0].label].AverageLanding
+              testsArray[fiberColors[activeStep || 0].label]?.AverageLanding
             }
             onChange={(e) =>
               setTestsArray((prev) => ({
@@ -204,7 +203,7 @@ export const AddTest: FC<IAddTestInterface> = ({
             size="small"
             variant="filled"
             label="סוף קו"
-            value={testsArray[fiberColors[activeStep || 0].label].end}
+            value={testsArray[fiberColors[activeStep || 0].label]?.end}
             onChange={(e) =>
               setTestsArray((prev) => ({
                 ...prev,
@@ -225,6 +224,12 @@ export const AddTest: FC<IAddTestInterface> = ({
           </Button>
         </FormControl>
       </Stack>
+      <Toast
+        open={openToast}
+        setOpen={setOpenToast}
+        message={toastMessage.message}
+        severity={toastMessage.severity}
+      />
     </Box>
   );
 };
