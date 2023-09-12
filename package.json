@@ -288,6 +288,7 @@
     "react-leaflet": "^4.2.1",
     "react-leaflet-search": "^2.0.1",
     "react-router-dom": "^6.15.0",
+    "recharts": "^2.8.0",
     "regenerator-runtime": "^0.13.9",
     "uuid": "^9.0.0",
     "yup": "^1.2.0"

@@ -1,12 +1,25 @@
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
+import { ITestings } from 'interfaces/ITestings.interface';
+import { useGovTestings } from '../../../hooks/useGovTestings';
+import { GovTestCard } from './govTestCard';
 
-// eslint-disable-next-line import/prefer-default-export
 export const TestingList = () => {
+  const { govTestings } = useGovTestings();
+
   return (
-    <Stack>
-      <Typography variant="h6" component="span">
-        Testing List
-      </Typography>
+    <Stack
+      sx={{
+        overflow: 'auto',
+        overflowY: '-moz-hidden-unscrollable',
+        '&::-webkit-scrollbar': { display: 'none' },
+        height: '100%',
+        maxHeight: '100vh',
+        width: '100%',
+      }}
+    >
+      {govTestings.map((govTest: ITestings) => {
+        return <GovTestCard govTest={govTest} key={govTest.id} />;
+      })}
     </Stack>
   );
 };

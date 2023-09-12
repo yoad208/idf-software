@@ -6,6 +6,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { v4 as uuidV4 } from 'uuid';
 import { FC, useContext, useState } from 'react';
 import { FaXmark } from 'react-icons/fa6';
 import { testsProvider } from '../../../context/testsProvider';
@@ -59,7 +60,7 @@ export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
     const gov: IGov | undefined = govs.find((g) => g.id === govId);
     if (!gov) return;
     setCurrGov(gov);
-    setTests({ ...tests, govId });
+    setTests({ ...tests, id: uuidV4(), govId });
     setOpen(true);
   };
 
@@ -77,7 +78,7 @@ export const AddTestButtons: FC<AddTestButtonProps> = ({ govId, ...rest }) => {
           color: 'black',
           border: 'none',
           m: '80px auto',
-          position: 'relative',
+          position: 'absolute',
         }}
       >
         <Box

@@ -13,7 +13,15 @@ export const StepperButtons: FC<IStepperButtons> = ({
   steps,
 }) => {
   return (
-    <Box mt={2.5} sx={{ display: 'flex', flexDirection: 'row', p: 2 }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        position: 'absolute',
+        bottom: 40,
+        left: 40,
+      }}
+    >
       {!allStepsCompleted() && (
         <Button
           variant="outlined"

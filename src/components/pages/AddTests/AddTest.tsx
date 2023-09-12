@@ -25,30 +25,40 @@ export const AddTest: FC<IAddTestInterface> = ({
   const [testsArray, setTestsArray] = useState<IFiberColors>(
     {} as IFiberColors
   );
-  const [openToast, setOpenToast] = useState(false);
+  const [openToast, setOpenToast] = useState<boolean>(false);
   const { tests, setTests } = useContext(testsProvider);
   const arr = testsArray[fiberColors[activeStep || 0].label]?.OTDR;
   const [toastMessage, setToastMessage] = useState<IToast>({} as IToast);
+
   const lastTestIsNotEmpty = () => {
+    if (!testsArray[fiberColors[activeStep || 0].label]?.OTDR) {
+      return true;
+    }
     return !(
-      (!testsArray[fiberColors[activeStep || 0].label] &&
-        testsArray[fiberColors[activeStep || 0].label]?.OTDR[
-          testsArray[fiberColors[activeStep || 0].label]?.OTDR.length - 1
-        ].distance === 0) ||
-      (!testsArray[fiberColors[activeStep || 0].label] &&
-        testsArray[fiberColors[activeStep || 0].label]?.OTDR[
-          testsArray[fiberColors[activeStep || 0].label]?.OTDR.length - 1
-        ].landing === 0)
+      testsArray[fiberColors[activeStep || 0].label]?.OTDR[
+        testsArray[fiberColors[activeStep || 0].label]?.OTDR.length - 1
+      ].distance === 0 ||
+      testsArray[fiberColors[activeStep || 0].label]?.OTDR[
+        testsArray[fiberColors[activeStep || 0].label]?.OTDR.length - 1
+      ].landing === 0
     );
   };
 
   const addMoreTests = () => {
-    if (!lastTestIsNotEmpty()) return;
+    if (!lastTestIsNotEmpty()) {
+      setToastMessage({
+        message: 'לא נבחרו בדיקות',
+        severity: 'error',
+      });
+      setOpenToast(true);
+      return;
+    }
     setTestsArray((prev) => {
-      if (!prev[fiberColors[activeStep || 0].label]) {
+      if (!prev[fiberColors[activeStep || 0].label]?.OTDR) {
         return {
           ...prev,
           [fiberColors[activeStep || 0].label]: {
+            ...prev[fiberColors[activeStep || 0].label],
             OTDR: [{ ...test, id: uuidV4() }],
           },
         };
@@ -108,8 +118,8 @@ export const AddTest: FC<IAddTestInterface> = ({
     <Box
       sx={{
         p: 1.5,
-        height: '250px',
-        maxHeight: '250px',
+        height: '35vh',
+        maxHeight: '35vh',
         overflow: 'auto',
         overflowY: '-moz-hidden-unscrollable',
         '&::-webkit-scrollbar': { display: 'none' },
@@ -166,7 +176,8 @@ export const AddTest: FC<IAddTestInterface> = ({
             variant="filled"
             label="ניחות מצטבר"
             value={
-              testsArray[fiberColors[activeStep || 0].label]?.CumulativeLanding
+              testsArray[fiberColors[activeStep || 0].label]
+                ?.CumulativeLanding || 0
             }
             onChange={(e) =>
               setTestsArray((prev) => ({
@@ -185,7 +196,8 @@ export const AddTest: FC<IAddTestInterface> = ({
             variant="filled"
             label="ניחות ממוצע"
             value={
-              testsArray[fiberColors[activeStep || 0].label]?.AverageLanding
+              testsArray[fiberColors[activeStep || 0].label]?.AverageLanding ||
+              0
             }
             onChange={(e) =>
               setTestsArray((prev) => ({
@@ -203,7 +215,7 @@ export const AddTest: FC<IAddTestInterface> = ({
             size="small"
             variant="filled"
             label="סוף קו"
-            value={testsArray[fiberColors[activeStep || 0].label]?.end}
+            value={testsArray[fiberColors[activeStep || 0].label]?.end || 0}
             onChange={(e) =>
               setTestsArray((prev) => ({
                 ...prev,

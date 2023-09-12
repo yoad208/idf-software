@@ -14,7 +14,7 @@ export const DynamicInput: FC<DynamicInputProps> = ({
 }) => {
   return (
     <>
-      {arr?.map((_, i) => {
+      {(arr || []).map((_, i) => {
         return (
           <Stack {...rest} key={i}>
             <Typography>{i + 1}</Typography>

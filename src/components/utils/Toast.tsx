@@ -15,11 +15,18 @@ export const Toast: FC<ToastProps> = ({ open, setOpen, message, severity }) => {
 
   const transition: ComponentType<TransitionProps> | undefined = TransitionLeft;
 
+  const handelClose = (_: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <Snackbar
       open={open}
       autoHideDuration={3500}
-      onClose={() => setOpen(false)}
+      onClose={handelClose}
       TransitionComponent={transition}
     >
       <Alert

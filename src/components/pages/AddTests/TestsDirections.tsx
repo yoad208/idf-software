@@ -21,7 +21,13 @@ type TestDirectionProps = {
 };
 
 export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
-  const { tests, upTestComplete, downTestComplete } = useContext(testsProvider);
+  const {
+    tests,
+    upTestComplete,
+    downTestComplete,
+    setUpTestComplete,
+    setDownTestComplete,
+  } = useContext(testsProvider);
   const [value, setValue] = useState('1');
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState<IToast>({} as IToast);
@@ -52,7 +58,8 @@ export const TestsDirections: FC<TestDirectionProps> = ({ setOpen }) => {
       }
     } else {
       createTestings(tests);
-      createTestings(tests);
+      setUpTestComplete(false);
+      setDownTestComplete(false);
       setOpen(false);
     }
   };

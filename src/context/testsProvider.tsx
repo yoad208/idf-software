@@ -5,7 +5,6 @@ import {
   SetStateAction,
   useState,
 } from 'react';
-import { v4 as uuidV4 } from 'uuid';
 import { IFiberColors, ITestings } from '../interfaces/ITestings.interface';
 
 type TProvider = {
@@ -23,7 +22,7 @@ export const TestProvider = ({ children }: { children: ReactNode }) => {
   const [upTestComplete, setUpTestComplete] = useState(false);
   const [downTestComplete, setDownTestComplete] = useState(false);
   const [tests, setTests] = useState<ITestings>({
-    id: uuidV4(),
+    id: '',
     govId: '',
     up: {} as IFiberColors,
     down: {} as IFiberColors,
