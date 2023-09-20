@@ -93,29 +93,6 @@ const OtdrList: FC<IOtdrList> = ({ otdr }) => {
     </>
   );
 };
-
-//         <Stack
-//           spacing={2}
-//           sx={{
-//             maxHeight: 250,
-//             overflow: 'auto',
-//             overflowY: '-moz-hidden-unscrollable',
-//             '&::-webkit-scrollbar': { display: 'none' },
-//           }}
-//         >
-//           {otdr?.map((o, i) => {
-//             return (
-//               <Stack direction="row" justifyContent="space-around" key={i}>
-//                 <Typography sx={{ textAlign: 'center' }}>
-//                   {o?.distance}
-//                 </Typography>
-//                 <Typography sx={{ textAlign: 'center' }}>
-//                   {o?.landing}
-//                 </Typography>
-//               </Stack>
-//             );
-//           })}
-//         </Stack>
 const TestingsTable = ({ data }: { data: ITest }) => {
   return (
     <TableContainer component={Paper}>

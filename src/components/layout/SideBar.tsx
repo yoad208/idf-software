@@ -29,6 +29,10 @@ export const SideBar = () => {
       title: 'הוספת בדיקה',
       path: '/add-test',
     },
+    {
+      title: 'ניתוח נתונים',
+      path: '/data-analysis',
+    },
   ];
 
   return (

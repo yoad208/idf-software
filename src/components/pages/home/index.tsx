@@ -36,12 +36,11 @@ export const Map = () => {
         boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.25)',
       }}
     >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <TileLayer url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png" />
       <SearchControl
         provider={prov}
         marker={false}
         retainZoomLevel={false}
-
         animateZoom
         autoClose
         searchLabel="...חיפוש"
