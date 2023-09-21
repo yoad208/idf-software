@@ -7,6 +7,7 @@ import locationMarker from '../../../../assets/location.png';
 import { IGov } from '../../../interfaces/IGov.interface';
 import { useGovs } from '../../../hooks/useGovs';
 import { SearchControl } from './SearchOption';
+import CustomPopupContent from './CustomPopupContent';
 
 const marker = L.icon({
   iconUrl: locationMarker,
@@ -54,7 +55,9 @@ export const Map = () => {
             icon={marker}
             position={[gov.location.lat, gov.location.lang] as LatLngExpression}
           >
-            <Popup>{gov.place_description}</Popup>
+            <Popup>
+              <CustomPopupContent gov={gov} />
+            </Popup>
           </Marker>
         );
       })}

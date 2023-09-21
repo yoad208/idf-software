@@ -1,4 +1,4 @@
-import { Button, Container, Paper, Stack, Typography } from '@mui/material';
+import { Button, Container, Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import { BsFillFileEarmarkPdfFill } from 'react-icons/bs';
 import { SelectOptions } from './SelectOptions';
@@ -11,6 +11,7 @@ import { IToast } from '../../../interfaces/IToast.interface';
 import { AnalysisLineChart } from './AnalysisLineChart';
 import { AnalysisTableChart } from './AnalysisTableChart';
 import { downloadPdf } from '../../../utils/exportToPdf';
+import { DataNotFound } from '../../utils/DataNotFound';
 
 export interface IAnalysisData {
   date: Date;
@@ -19,6 +20,7 @@ export interface IAnalysisData {
 }
 
 export interface AnalysisData {
+  gov: string;
   colors: string[];
   testDirection: string;
   fiberLength: number | undefined;
@@ -104,6 +106,7 @@ export const DataAnalysis = () => {
     }
 
     setAnalysisData({
+      gov: govTestToAnalysis.gov,
       colors,
       testDirection,
       fiberLength,
@@ -169,8 +172,8 @@ export const DataAnalysis = () => {
         <Stack width="100%" height="100%" spacing={1} id="analysisData">
           <Stack
             width="100%"
-            maxHeight="60vh"
-            height="60vh"
+            maxHeight="55vh"
+            height="55vh"
             direction="row"
             justifyContent="space-between"
           >
@@ -185,7 +188,7 @@ export const DataAnalysis = () => {
               analysisData?.results?.length > 0 ? (
                 <AnalysisLineChart data={analysisData} />
               ) : (
-                <Typography>לא נמצאו נתונים</Typography>
+                <DataNotFound />
               )}
             </Paper>
             <Paper
@@ -199,17 +202,17 @@ export const DataAnalysis = () => {
               analysisData?.results?.length > 0 ? (
                 <AnalysisBarChart data={analysisData} />
               ) : (
-                <Typography>לא נמצאו נתונים</Typography>
+                <DataNotFound />
               )}
             </Paper>
           </Stack>
           <Paper
             sx={{
-              height: '25vh',
+              height: '30vh',
               width: '100%',
               bgcolor: 'white',
               p: 1,
-              maxHeight: '25vh',
+              maxHeight: '30vh',
             }}
           >
             <AnalysisTableChart data={analysisData} />

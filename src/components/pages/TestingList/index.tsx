@@ -1,11 +1,10 @@
-import { Stack } from '@mui/material';
+import { Container } from '@mui/material';
 import { TestingList } from './TestingList';
 
 export const AllTestingSection = () => {
-
   return (
-    <Stack p={2}>
+    <Container sx={{ py: 1 }}>
       <TestingList />
-    </Stack>
+    </Container>
   );
 };

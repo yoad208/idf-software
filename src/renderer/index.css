@@ -1,24 +1,39 @@
 * {
-    box-sizing: border-box;
-    text-align: right;
+  box-sizing: border-box;
+  text-align: right;
 }
 
 body {
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    background-color: #e6e6e7;
-    min-width: 320px;
-    min-height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background-color: #e6e6e7;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
 .titleBar {
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
 }
 
-#operations{
-    -webkit-app-region: no-drag;
+#operations {
+  -webkit-app-region: no-drag;
+}
+
+.no-data {
+  animation: fadeInOut 2s infinite;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #364651;
+  color: #f3f3f4;
+  width: 200px;
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+  width: 190px;
+  margin: 22px auto 8px auto;
 }
 
 .leaflet-geosearch-bar form .glass {
@@ -30,6 +45,7 @@ body {
   color: #f3f3f4;
   transition: .5s;
 }
+
 .leaflet-geosearch-bar form .reset:hover {
   background-color: #2274d3;
   color: #f3f3f4;
@@ -60,8 +76,21 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
+}
+
+@keyframes fadeInOut {
+  0%  {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
 }
