@@ -32,7 +32,7 @@
     ]
   },
   "build": {
-    "productName": "AnalysisApp",
+    "productName": "תוכנת ניתוח סיבים אופטיים",
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "icon": "./assets/logo.ico",
