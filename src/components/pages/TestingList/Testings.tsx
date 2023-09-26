@@ -100,6 +100,9 @@ const TestingsTable = ({ data }: { data: ITest }) => {
         <TableHead>
           <TableRow sx={{ bgcolor: '#263841' }}>
             <TableCell align="center" sx={tableCellStyles}>
+              מספר גיד
+            </TableCell>
+            <TableCell align="center" sx={tableCellStyles}>
               גיד
             </TableCell>
             <TableCell align="center" sx={tableCellStyles}>
@@ -117,27 +120,40 @@ const TestingsTable = ({ data }: { data: ITest }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(data).map(([name, value], index) => (
-            <TableRow
-              key={name}
-              sx={{ bgcolor: index % 2 ? 'whitesmoke' : 'white' }}
-            >
-              <TableCell
-                align="center"
-                component="th"
-                scope="row"
-                sx={{ fontWeight: 'bold', fontSize: 15 }}
+          {Object.entries(data)
+            .sort(
+              ([, valueA], [, valueB]) =>
+                valueA?.FiberNumber - valueB?.FiberNumber
+            )
+            .map(([name, value], index) => (
+              <TableRow
+                key={name}
+                sx={{ bgcolor: index % 2 ? 'whitesmoke' : 'white' }}
               >
-                {name}
-              </TableCell>
-              <TableCell align="center">
-                <OtdrList otdr={value?.OTDR} />
-              </TableCell>
-              <TableCell align="center">{value?.AverageLanding}</TableCell>
-              <TableCell align="center">{value?.CumulativeLanding}</TableCell>
-              <TableCell align="center">{value?.end}</TableCell>
-            </TableRow>
-          ))}
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: 'bold', fontSize: 15 }}
+                >
+                  {value?.FiberNumber}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: 'bold', fontSize: 15 }}
+                >
+                  {name}
+                </TableCell>
+                <TableCell align="center">
+                  <OtdrList otdr={value?.OTDR} />
+                </TableCell>
+                <TableCell align="center">{value?.AverageLanding}</TableCell>
+                <TableCell align="center">{value?.CumulativeLanding}</TableCell>
+                <TableCell align="center">{value?.end}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

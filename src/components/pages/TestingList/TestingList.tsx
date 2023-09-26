@@ -15,6 +15,10 @@ export const TestingList = () => {
   const [currTestings, setCurrTestings] = useState<ITestings[]>([]);
 
   useEffect(() => {
+    if (searchParams.get('q') === '') {
+      searchParams.delete('q');
+      setSearchParams(searchParams);
+    }
     setCurrTestings(
       !searchParams.has('q')
         ? govTestings
@@ -22,9 +26,10 @@ export const TestingList = () => {
             return govTest.govId === searchParams.get('q');
           })
     );
-  }, [govTestings, searchParams]);
+  }, [govTestings, searchParams, setSearchParams]);
 
   const handleSearch = () => {
+    if (!searchParams.has('q')) return;
     const govId = govs.find((gov) => {
       return (
         gov.gov_name === searchParams.get('q') ||
@@ -37,12 +42,11 @@ export const TestingList = () => {
         return govTest.govId === govId?.id;
       })
     );
-
-    console.log(currTestings);
   };
 
   return (
     <Stack
+      spacing={1}
       sx={{
         overflow: 'auto',
         overflowY: '-moz-hidden-unscrollable',
@@ -52,7 +56,14 @@ export const TestingList = () => {
         width: '100%',
       }}
     >
-      <Stack direction="row-reverse" spacing={2} pb={2}>
+      <Stack
+        direction="row-reverse"
+        alignItems="center"
+        spacing={2}
+        p={1}
+        bgcolor="white"
+        borderRadius={2}
+      >
         <IconButton onClick={handleSearch}>
           <BiSearchAlt />
         </IconButton>

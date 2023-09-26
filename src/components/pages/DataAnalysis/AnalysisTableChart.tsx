@@ -18,7 +18,6 @@ export const AnalysisTableChart: FC<ChartProps> = ({ data }) => {
   const currGov = govs?.find((gov) => {
     return gov.id === data?.gov;
   });
-  console.log(currGov);
   return (
     <TableContainer>
       {data?.fibersEnd?.length > 0 && data?.results?.length > 0 ? (
@@ -30,12 +29,19 @@ export const AnalysisTableChart: FC<ChartProps> = ({ data }) => {
             </Stack>
             <Stack direction="row-reverse" spacing={1}>
               <Typography color="grey">:מיקום הגוב</Typography>
-              <Typography fontWeight="bold">{currGov?.place_description}</Typography>
+              <Typography fontWeight="bold">
+                {currGov?.place_description}
+              </Typography>
             </Stack>
           </Stack>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ maxHeight: 10 }}>
               <TableRow>
+                <TableCell
+                  sx={{ textAlign: 'center', p: 0, fontWeight: 'bold' }}
+                >
+                  מספר גיד
+                </TableCell>
                 <TableCell
                   sx={{ textAlign: 'center', p: 0, fontWeight: 'bold' }}
                 >
@@ -76,6 +82,9 @@ export const AnalysisTableChart: FC<ChartProps> = ({ data }) => {
             <TableBody>
               {Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={index}>
+                  <TableCell sx={{ p: 0, fontWeight: 'bold' }} align="center">
+                    {data?.fibersNumbers?.[index]}
+                  </TableCell>
                   <TableCell sx={{ p: 0, fontWeight: 'bold' }} align="center">
                     {data?.colors?.[index]}
                   </TableCell>

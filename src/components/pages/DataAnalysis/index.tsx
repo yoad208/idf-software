@@ -21,6 +21,7 @@ export interface IAnalysisData {
 
 export interface AnalysisData {
   gov: string;
+  fibersNumbers: number[];
   colors: string[];
   testDirection: string;
   fiberLength: number | undefined;
@@ -73,6 +74,7 @@ export const DataAnalysis = () => {
   };
 
   const handleAnalysisData = () => {
+    const fibersNumbers: number[] = [];
     const averageLanding: number[] = [];
     const cumulativeLanding: number[] = [];
     const lengthArray: number[] = [];
@@ -97,16 +99,22 @@ export const DataAnalysis = () => {
       fiberLength = Number(obj?.fiberLength);
       testDirection = govTestToAnalysis?.testDirection;
       colors = Array.from(Object.keys(obj?.fiberOTDR));
-      Object.entries(obj?.fiberOTDR as IFiberColors).forEach(([, value]) => {
-        averageLanding.push(value?.AverageLanding);
-        cumulativeLanding.push(value?.CumulativeLanding);
-        lengthArray.push(value?.end);
-        lossPlaces.push(Math.abs((obj?.fiberLength || 0) - value?.end));
-      });
+      Object.entries(obj?.fiberOTDR as IFiberColors)
+        .sort(
+          ([, valueA], [, valueB]) => valueA?.FiberNumber - valueB?.FiberNumber
+        )
+        .forEach(([, value]) => {
+          fibersNumbers.push(value?.FiberNumber);
+          averageLanding.push(value?.AverageLanding);
+          cumulativeLanding.push(value?.CumulativeLanding);
+          lengthArray.push(value?.end);
+          lossPlaces.push(Math.abs((obj?.fiberLength || 0) - value?.end));
+        });
     }
 
     setAnalysisData({
       gov: govTestToAnalysis.gov,
+      fibersNumbers,
       colors,
       testDirection,
       fiberLength,

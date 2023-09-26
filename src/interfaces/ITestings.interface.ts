@@ -5,6 +5,7 @@ export interface IOtdr {
 }
 
 export interface ITest {
+  FiberNumber: number;
   OTDR: IOtdr[];
   CumulativeLanding: number;
   AverageLanding: number;

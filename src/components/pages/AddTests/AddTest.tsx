@@ -90,6 +90,7 @@ export const AddTest: FC<IAddTestInterface> = ({
       [fiberColors[activeStep || 0].label]: {
         ...prev[fiberColors[activeStep || 0].label],
         OTDR: newTestsArray,
+        FiberNumber: (activeStep || 0) + 1,
       },
     }));
   };
@@ -185,6 +186,7 @@ export const AddTest: FC<IAddTestInterface> = ({
                 [fiberColors[activeStep || 0].label]: {
                   ...prev[fiberColors[activeStep || 0].label],
                   CumulativeLanding: Number(e.target.value),
+                  FiberNumber: (activeStep || 0) + 1,
                 },
               }))
             }
@@ -205,6 +207,7 @@ export const AddTest: FC<IAddTestInterface> = ({
                 [fiberColors[activeStep || 0].label]: {
                   ...prev[fiberColors[activeStep || 0].label],
                   AverageLanding: Number(e.target.value),
+                  FiberNumber: (activeStep || 0) + 1,
                 },
               }))
             }
@@ -222,6 +225,7 @@ export const AddTest: FC<IAddTestInterface> = ({
                 [fiberColors[activeStep || 0].label]: {
                   ...prev[fiberColors[activeStep || 0].label],
                   end: Number(e.target.value),
+                  FiberNumber: (activeStep || 0) + 1,
                 },
               }))
             }
