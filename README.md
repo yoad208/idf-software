@@ -8,8 +8,3 @@
 <img width="960" alt="Screenshot 2023-12-17 125141" src="https://github.com/yoad208/idf-software/assets/94039515/5767a186-30d8-4597-a1a9-e880535ad087">
 <img width="960" alt="Screenshot 2023-12-17 125204" src="https://github.com/yoad208/idf-software/assets/94039515/86e4891d-22b2-457b-bd46-448e63f402ed">
 <img width="959" alt="Screenshot 2023-12-17 125230" src="https://github.com/yoad208/idf-software/assets/94039515/1eaff591-3817-46e2-ac69-4a6eb1810433">
-
-- https://dev.to/awohletz/an-electron-app-architecture-32hi
-- https://github.com/TasinIshmam/prisma-electron-test
-- https://github.com/prisma/prisma/discussions/5200
-- https://github.com/prisma/prisma/issues/9613
